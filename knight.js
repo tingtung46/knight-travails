@@ -9,7 +9,7 @@ const Node = (coordinate) => {
   };
 };
 
-export const allMoves = [];
+const allMoves = [];
 
 const getPossibleMoves = (coordinate) => {
   let node = Node(coordinate);
@@ -18,24 +18,24 @@ const getPossibleMoves = (coordinate) => {
   node.possibleMoves.push(
     [x - 2, y + 1],
     [x - 1, y + 2],
-    [x + 1, y + 2],
-    [x + 2, y + 1],
     [x + 2, y - 1],
     [x + 1, y - 2],
+    [x - 2, y - 1],
     [x - 1, y - 2],
-    [x - 2, y - 1]
+    [x + 2, y + 1],
+    [x + 1, y + 2]
   );
 
   node.possibleMoves = node.possibleMoves.filter((possMove) => {
     let [x, y] = possMove;
 
-    if (x >= 0 && x < 7 && y >= 0 && y < 7) return possMove;
+    if (x >= 0 && x <= 7 && y >= 0 && y <= 7) return possMove;
   });
 
   allMoves.push(node);
 };
 
-for (let i = 0; i < chessBoard.length - 1; i++) {
+for (let i = 0; i < chessBoard.length; i++) {
   for (let j = 0; j < chessBoard.length; j++) {
     getPossibleMoves([i, j]);
   }
@@ -50,7 +50,7 @@ const findPosition = (start) => {
   return position;
 };
 
-export const knightMoves = (start, end) => {
+const knightMoves = (start, end) => {
   let queue = [findPosition(start)];
   let [startCol, startRow] = start;
   let [endCol, endRow] = end;
@@ -72,7 +72,7 @@ export const knightMoves = (start, end) => {
     let nextNode = queue.shift();
     let checkPossMove = nextNode.possibleMoves.filter((possMove) => {
       let [x, y] = possMove;
-      if (x === endRow && y === endCol) return possMove;
+      if (x === endCol && y === endRow) return possMove;
     });
 
     if (checkPossMove.length === 0) {
@@ -85,4 +85,17 @@ export const knightMoves = (start, end) => {
       return sequence;
     }
   }
+};
+
+export const displayResult = (start, end) => {
+  const sequence = knightMoves(start, end);
+
+  let execution = `> knightMoves([${start}], [${end}])`;
+  let moves = sequence.length;
+
+  console.log(execution);
+  console.log(`=> You made it in ${moves - 1} moves! Here's your path:`);
+  sequence.forEach((move) => {
+    console.log(move);
+  });
 };
