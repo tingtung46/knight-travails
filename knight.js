@@ -35,7 +35,7 @@ const getPossibleMoves = (coordinate) => {
   allMoves.push(node);
 };
 
-for (let i = chessBoard.length - 1; i >= 0; i--) {
+for (let i = 0; i < chessBoard.length - 1; i++) {
   for (let j = 0; j < chessBoard.length; j++) {
     getPossibleMoves([i, j]);
   }
@@ -52,15 +52,15 @@ const findPosition = (start) => {
 
 export const knightMoves = (start, end) => {
   let queue = [findPosition(start)];
-  let [startRow, startCol] = start;
-  let [endRow, endCol] = end;
+  let [startCol, startRow] = start;
+  let [endCol, endRow] = end;
 
   if (startRow === endRow && startCol === endCol) return [start];
   if (
     startRow < 0 ||
     startRow > 7 ||
     startCol < 0 ||
-    startRow > 7 ||
+    startCol > 7 ||
     endRow < 0 ||
     endRow > 7 ||
     endCol < 0 ||
