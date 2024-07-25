@@ -40,3 +40,49 @@ for (let i = chessBoard.length - 1; i >= 0; i--) {
     getPossibleMoves([i, j]);
   }
 }
+
+const findPosition = (start) => {
+  let [x, y] = start;
+  let [position] = allMoves.filter((move) => {
+    if (move.coordinate[0] === x && move.coordinate[1] === y) return move;
+  });
+
+  return position;
+};
+
+export const knightMoves = (start, end) => {
+  let queue = [findPosition(start)];
+  let [startRow, startCol] = start;
+  let [endRow, endCol] = end;
+
+  if (startRow === endRow && startCol === endCol) return [start];
+  if (
+    startRow < 0 ||
+    startRow > 7 ||
+    startCol < 0 ||
+    startRow > 7 ||
+    endRow < 0 ||
+    endRow > 7 ||
+    endCol < 0 ||
+    endCol > 7
+  )
+    throw Error("Out of boundaries");
+
+  while (queue.length) {
+    let nextNode = queue.shift();
+    let checkPossMove = nextNode.possibleMoves.filter((possMove) => {
+      let [x, y] = possMove;
+      if (x === endRow && y === endCol) return possMove;
+    });
+
+    if (checkPossMove.length === 0) {
+      nextNode.possibleMoves.forEach((move) => {
+        queue.push(findPosition(move));
+      });
+    } else {
+      let sequence = knightMoves(start, nextNode.coordinate);
+      sequence.push(checkPossMove.flat());
+      return sequence;
+    }
+  }
+};
